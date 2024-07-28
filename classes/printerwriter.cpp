@@ -31,3 +31,10 @@ void PrinterWriter::print(std::string message)
     os << message << std::endl;
 }
 
+std::string Utility::PrinterWriter::prompt(std::string message)
+{
+    std::string ans;
+    print(message);
+    is >> ans;
+    return ans;
+}

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cctype>
 #include <string.h>
+#include <fstream>
 
 using namespace Utility;
 
@@ -14,20 +15,28 @@ void WordGame::guess()
         pw.print("Word must have 5 letters. Try again");
         std::cin >> gWord;
     }
-
+    pw.print("");
     compare(&gWord);
-    print_result();
 }
 
 void WordGame::startGame()
 {
     currentInd = 0;
+    passed = false;
+
+    if (wordllist->empty()) {
+        readwords();
+    }
     
+    chooseword();
+
     for (auto row : rows) {
         memset(row, 0, sizeof(row));
     }
     pw.print("Game started. Guess a 5 letter word.");
 }
+
+
 
 void Utility::WordGame::print_result() {
     for (int i = 0; i < currentInd; i++) {
@@ -49,6 +58,7 @@ void Utility::WordGame::print_result() {
         }
         pw.print("");
     }
+    pw.print("*******************");
 }
 
 void WordGame::compare(std::string *gword) {
@@ -86,4 +96,33 @@ void WordGame::compare(std::string *gword) {
 bool WordGame::notComplete()
 {
     return currentInd < 5 && passed == false;
+}
+void Utility::WordGame::promptNewGame() {
+    pw.print("\n*************");
+    std::string ans = pw.prompt("Do you want to start a new game? y/n");
+
+    while (ans != "y" && ans != "n") {
+        ans = pw.prompt("Invalid answer. Do you want to start a new game? y/n");
+    }
+
+    if (ans == "y") {
+        startGame();
+    }
+}
+void WordGame::readwords() {
+
+    std::ifstream FileReader("wordlist.csv");
+   
+    for (int i = 0; i < 10; i++) {
+        char cword[6];
+        FileReader.get(cword, 6, ',');
+        std::string sword(cword);
+        wordllist->push_back(sword);
+        FileReader.ignore(1, ',');
+    }
+
+}
+void WordGame::chooseword() {
+    int chosenIndex = rand() % 10;
+    word = wordllist->at(chosenIndex);
 };

@@ -1,6 +1,7 @@
 #ifndef GAME
 #define GAME
 #include "printerwriter.h"
+#include <vector>
 
 namespace Utility {
 
@@ -25,7 +26,11 @@ namespace Utility {
             void print_result();
             void compare(std::string *gword);
             bool notComplete();
+            void promptNewGame();
         private:
+            void readwords();
+            void chooseword();
+            std::vector<std::string> wordllist[10];
             std::string word = "horse";
             PrinterWriter pw;
             GuessedChar rows[6][5];
